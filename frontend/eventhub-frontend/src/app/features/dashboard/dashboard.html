@@ -1,0 +1,113 @@
+<div class="dashboard-container">
+
+  <header class="dashboard-header">
+
+    <div>
+      <h1>EventHub</h1>
+      <p>Event Management Dashboard</p>
+    </div>
+
+    <button class="logout-btn">
+      Logout
+    </button>
+
+  </header>
+
+
+  <main>
+
+    <h2>Dashboard Overview</h2>
+
+
+    @if (isLoading) {
+
+      <div class="loading">
+        Loading dashboard...
+      </div>
+
+    } @else if (errorMessage) {
+
+      <div class="error">
+        {{ errorMessage }}
+      </div>
+
+    } @else {
+
+      <div class="dashboard-cards">
+
+        <div class="dashboard-card">
+
+          <div class="card-icon">
+            👥
+          </div>
+
+          <div>
+            <p>Total Users</p>
+            <h3>{{ totalUsers }}</h3>
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <div class="card-icon">
+            📅
+          </div>
+
+          <div>
+            <p>Total Events</p>
+            <h3>{{ totalEvents }}</h3>
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <div class="card-icon">
+            📂
+          </div>
+
+          <div>
+            <p>Total Categories</p>
+            <h3>{{ totalCategories }}</h3>
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <div class="card-icon">
+            🎟️
+          </div>
+
+          <div>
+            <p>Total Registrations</p>
+            <h3>{{ totalRegistrations }}</h3>
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <div class="card-icon">
+            🚀
+          </div>
+
+          <div>
+            <p>Upcoming Events</p>
+            <h3>{{ upcomingEvents }}</h3>
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+  </main>
+
+</div>

@@ -1,0 +1,192 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+
+// ==========================================
+// REGISTRATION REQUEST
+// ==========================================
+
+export interface RegistrationRequest {
+
+  userId: number;
+
+  eventId: number;
+
+  registrationDate: string;
+
+  status: 'REGISTERED' | 'CANCELLED';
+
+}
+
+
+// ==========================================
+// REGISTRATION RESPONSE
+// ==========================================
+
+export interface RegistrationResponse {
+
+  id?: number;
+
+  user?: {
+
+    id?: number;
+
+    fullName?: string;
+
+    email?: string;
+
+  };
+
+  event?: {
+
+    id?: number;
+
+    title?: string;
+
+    description?: string;
+
+    venue?: string;
+
+    eventDate?: string;
+
+  };
+
+  registrationDate: string;
+
+  status: 'REGISTERED' | 'CANCELLED';
+
+  createdAt?: string;
+
+  updatedAt?: string;
+
+}
+
+
+// ==========================================
+// SERVICE
+// ==========================================
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RegistrationService {
+
+
+  // ========================================
+  // API URL
+  // ========================================
+
+  private apiUrl =
+    'http://localhost:8080/api/registrations';
+
+
+  // ========================================
+  // CONSTRUCTOR
+  // ========================================
+
+  constructor(
+    private http: HttpClient
+  ) {}
+
+
+  // ========================================
+  // CREATE REGISTRATION
+  // ========================================
+
+  createRegistration(
+    registration: RegistrationRequest
+  ): Observable<RegistrationResponse> {
+
+    console.log(
+      'CREATING REGISTRATION:',
+      registration
+    );
+
+    return this.http.post<RegistrationResponse>(
+      this.apiUrl,
+      registration
+    );
+
+  }
+
+
+  // ========================================
+  // GET ALL REGISTRATIONS
+  // ========================================
+
+  getRegistrations(): Observable<RegistrationResponse[]> {
+
+    console.log(
+      'GET ALL REGISTRATIONS'
+    );
+
+    return this.http.get<RegistrationResponse[]>(
+      this.apiUrl
+    );
+
+  }
+
+
+  // ========================================
+  // GET REGISTRATION BY ID
+  // ========================================
+
+  getRegistrationById(
+    id: number
+  ): Observable<RegistrationResponse> {
+
+    console.log(
+      'GET REGISTRATION:',
+      id
+    );
+
+    return this.http.get<RegistrationResponse>(
+      `${this.apiUrl}/${id}`
+    );
+
+  }
+
+
+  // ========================================
+  // UPDATE REGISTRATION
+  // ========================================
+
+  updateRegistration(
+    id: number,
+    registration: RegistrationRequest
+  ): Observable<RegistrationResponse> {
+
+    console.log(
+      'UPDATE REGISTRATION:',
+      id
+    );
+
+    return this.http.put<RegistrationResponse>(
+      `${this.apiUrl}/${id}`,
+      registration
+    );
+
+  }
+
+
+  // ========================================
+  // DELETE REGISTRATION
+  // ========================================
+
+  deleteRegistration(
+    id: number
+  ): Observable<any> {
+
+    console.log(
+      'DELETE REGISTRATION:',
+      id
+    );
+
+    return this.http.delete(
+      `${this.apiUrl}/${id}`
+    );
+
+  }
+
+}

@@ -1,0 +1,285 @@
+<div class="registrations-container">
+
+  <!-- ===================================== -->
+  <!-- HEADER -->
+  <!-- ===================================== -->
+
+  <header class="registrations-header">
+
+    <div>
+
+      <h1>EventHub</h1>
+
+      <p>
+        My Registrations
+      </p>
+
+    </div>
+
+
+    <button
+      class="back-btn"
+      (click)="backToEvents()">
+
+      ← Back to Events
+
+    </button>
+
+  </header>
+
+
+  <!-- ===================================== -->
+  <!-- MAIN -->
+  <!-- ===================================== -->
+
+  <main class="registrations-content">
+
+    <div class="page-title">
+
+      <h2>
+        My Registrations
+      </h2>
+
+      <p>
+        View the events you have registered for.
+      </p>
+
+    </div>
+
+
+    <!-- =================================== -->
+    <!-- LOADING -->
+    <!-- =================================== -->
+
+    @if (isLoading) {
+
+      <div class="loading">
+
+        Loading registrations...
+
+      </div>
+
+    }
+
+
+    <!-- =================================== -->
+    <!-- ERROR -->
+    <!-- =================================== -->
+
+    @if (!isLoading && errorMessage) {
+
+      <div class="error">
+
+        {{ errorMessage }}
+
+      </div>
+
+    }
+
+
+    <!-- =================================== -->
+    <!-- SUCCESS -->
+    <!-- =================================== -->
+
+    @if (successMessage) {
+
+      <div class="success">
+
+        {{ successMessage }}
+
+      </div>
+
+    }
+
+
+    <!-- =================================== -->
+    <!-- EMPTY -->
+    <!-- =================================== -->
+
+    @if (
+      !isLoading &&
+      !errorMessage &&
+      registrations.length === 0
+    ) {
+
+      <div class="empty">
+
+        <h3>
+          No Registrations Found
+        </h3>
+
+        <p>
+          You have not registered for any events yet.
+        </p>
+
+
+        <button
+          class="browse-btn"
+          (click)="backToEvents()">
+
+          Browse Events
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================== -->
+    <!-- REGISTRATIONS -->
+    <!-- =================================== -->
+
+    @if (
+      !isLoading &&
+      !errorMessage &&
+      registrations.length > 0
+    ) {
+
+      <div class="registrations-grid">
+
+        @for (
+          registration of registrations;
+          track registration.id
+        ) {
+
+          <div class="registration-card">
+
+
+            <!-- EVENT TITLE -->
+
+            <h3>
+
+              {{
+                registration.event?.title ||
+                'Event'
+              }}
+
+            </h3>
+
+
+            <!-- DESCRIPTION -->
+
+            @if (registration.event?.description) {
+
+              <p class="description">
+
+                {{ registration.event?.description }}
+
+              </p>
+
+            }
+
+
+            <!-- DATE -->
+
+            <div class="info">
+
+              <strong>
+                📅 Event Date:
+              </strong>
+
+              <span>
+
+                {{
+                  registration.event?.eventDate ||
+                  'Not available'
+                }}
+
+              </span>
+
+            </div>
+
+
+            <!-- VENUE -->
+
+            <div class="info">
+
+              <strong>
+                📍 Venue:
+              </strong>
+
+              <span>
+
+                {{
+                  registration.event?.venue ||
+                  'Not available'
+                }}
+
+              </span>
+
+            </div>
+
+
+            <!-- REGISTRATION DATE -->
+
+            <div class="info">
+
+              <strong>
+                📝 Registered On:
+              </strong>
+
+              <span>
+
+                {{ registration.registrationDate }}
+
+              </span>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="info">
+
+              <strong>
+                📌 Status:
+              </strong>
+
+              <span
+                class="status"
+                [class.registered]="
+                  registration.status === 'REGISTERED'
+                "
+                [class.cancelled]="
+                  registration.status === 'CANCELLED'
+                ">
+
+                {{ registration.status }}
+
+              </span>
+
+            </div>
+
+
+            <!-- CANCEL -->
+
+            @if (
+              registration.status === 'REGISTERED' &&
+              registration.id !== undefined
+            ) {
+
+              <button
+                class="cancel-registration-btn"
+                (click)="
+                  cancelRegistration(registration.id)
+                ">
+
+                Cancel Registration
+
+              </button>
+
+            }
+
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </main>
+
+</div>

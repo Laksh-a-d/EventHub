@@ -1,0 +1,266 @@
+<div class="add-event-page">
+
+  <div class="add-event-card">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <div class="page-header">
+
+      <div>
+        <h1>Create Event</h1>
+
+        <p>
+          Add a new event to EventHub
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="back-btn"
+        (click)="cancel()">
+
+        ← Back to Events
+
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         ERROR MESSAGE
+    ========================== -->
+
+    @if (errorMessage) {
+
+      <div class="error-message">
+
+        {{ errorMessage }}
+
+      </div>
+
+    }
+
+
+    <!-- =========================
+         SUCCESS MESSAGE
+    ========================== -->
+
+    @if (successMessage) {
+
+      <div class="success-message">
+
+        {{ successMessage }}
+
+      </div>
+
+    }
+
+
+    <!-- =========================
+         EVENT FORM
+    ========================== -->
+
+    <form
+      #eventForm="ngForm"
+      (ngSubmit)="createEvent()">
+
+
+      <!-- =========================
+           EVENT TITLE
+      ========================== -->
+
+      <div class="form-group">
+
+        <label for="title">
+          Event Title
+        </label>
+
+        <input
+          id="title"
+          type="text"
+          name="title"
+          [(ngModel)]="title"
+          placeholder="Enter event title"
+          required
+        />
+
+      </div>
+
+
+      <!-- =========================
+           DESCRIPTION
+      ========================== -->
+
+      <div class="form-group">
+
+        <label for="description">
+          Description
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="description"
+          placeholder="Enter event description"
+          rows="5"
+          required>
+        </textarea>
+
+      </div>
+
+
+      <!-- =========================
+           EVENT DATE
+      ========================== -->
+
+      <div class="form-group">
+
+        <label for="eventDate">
+          Event Date
+        </label>
+
+        <input
+          id="eventDate"
+          type="date"
+          name="eventDate"
+          [(ngModel)]="eventDate"
+          required
+        />
+
+      </div>
+
+
+      <!-- =========================
+           VENUE
+      ========================== -->
+
+      <div class="form-group">
+
+        <label for="venue">
+          Venue
+        </label>
+
+        <input
+          id="venue"
+          type="text"
+          name="venue"
+          [(ngModel)]="venue"
+          placeholder="Enter event venue"
+          required
+        />
+
+      </div>
+
+
+      <!-- =========================
+           CAPACITY
+      ========================== -->
+
+      <div class="form-group">
+
+        <label for="capacity">
+          Capacity
+        </label>
+
+        <input
+          id="capacity"
+          type="number"
+          name="capacity"
+          [(ngModel)]="capacity"
+          placeholder="Enter maximum capacity"
+          min="1"
+          required
+        />
+
+      </div>
+
+
+      <!-- =========================
+           CATEGORY ID
+      ========================== -->
+
+      <div class="form-group">
+
+        <label for="categoryId">
+          Category ID
+        </label>
+
+        <input
+          id="categoryId"
+          type="number"
+          name="categoryId"
+          [(ngModel)]="categoryId"
+          placeholder="Example: 1"
+          min="1"
+          required
+        />
+
+      </div>
+
+
+      <!-- =========================
+           ORGANIZER ID
+      ========================== -->
+
+      <div class="form-group">
+
+        <label for="organizerId">
+          Organizer ID
+        </label>
+
+        <input
+          id="organizerId"
+          type="number"
+          name="organizerId"
+          [(ngModel)]="organizerId"
+          placeholder="Example: 1"
+          min="1"
+          required
+        />
+
+      </div>
+
+
+      <!-- =========================
+           BUTTONS
+      ========================== -->
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="cancel()"
+          [disabled]="isLoading">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="submit"
+          class="create-btn"
+          [disabled]="isLoading">
+
+          @if (isLoading) {
+
+            Creating Event...
+
+          } @else {
+
+            Create Event
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

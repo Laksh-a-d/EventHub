@@ -1,0 +1,248 @@
+<div class="register-container">
+
+  <!-- ===================================== -->
+  <!-- HEADER -->
+  <!-- ===================================== -->
+
+  <header class="register-header">
+
+    <div>
+
+      <h1>EventHub</h1>
+
+      <p>
+        Event Registration
+      </p>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================== -->
+  <!-- MAIN -->
+  <!-- ===================================== -->
+
+  <main class="register-content">
+
+
+    <!-- =================================== -->
+    <!-- LOADING -->
+    <!-- =================================== -->
+
+    @if (isLoading) {
+
+      <div class="loading">
+
+        Loading event details...
+
+      </div>
+
+    }
+
+
+    <!-- =================================== -->
+    <!-- ERROR -->
+    <!-- =================================== -->
+
+    @if (!isLoading && errorMessage) {
+
+      <div class="error">
+
+        {{ errorMessage }}
+
+      </div>
+
+    }
+
+
+    <!-- =================================== -->
+    <!-- EVENT -->
+    <!-- =================================== -->
+
+    @if (!isLoading && event) {
+
+      <div class="registration-card">
+
+
+        <!-- EVENT TITLE -->
+
+        <h2>
+
+          {{ event.title }}
+
+        </h2>
+
+
+        <!-- DESCRIPTION -->
+
+        <p class="description">
+
+          {{ event.description }}
+
+        </p>
+
+
+        <!-- DATE -->
+
+        <div class="event-info">
+
+          <strong>
+            📅 Date:
+          </strong>
+
+          <span>
+            {{ event.eventDate }}
+          </span>
+
+        </div>
+
+
+        <!-- VENUE -->
+
+        <div class="event-info">
+
+          <strong>
+            📍 Venue:
+          </strong>
+
+          <span>
+            {{ event.venue }}
+          </span>
+
+        </div>
+
+
+        <!-- CAPACITY -->
+
+        <div class="event-info">
+
+          <strong>
+            👥 Capacity:
+          </strong>
+
+          <span>
+            {{ event.capacity }}
+          </span>
+
+        </div>
+
+
+        <!-- CATEGORY -->
+
+        <div class="event-info">
+
+          <strong>
+            📂 Category:
+          </strong>
+
+          <span>
+
+            {{ event.category?.name || 'Not available' }}
+
+          </span>
+
+        </div>
+
+
+        <!-- ORGANIZER -->
+
+        <div class="event-info">
+
+          <strong>
+            👤 Organizer:
+          </strong>
+
+          <span>
+
+            {{
+              event.organizer?.name ||
+              event.organizer?.email ||
+              'Not available'
+            }}
+
+          </span>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- SUCCESS -->
+        <!-- ================================= -->
+
+        @if (successMessage) {
+
+          <div class="success">
+
+            {{ successMessage }}
+
+          </div>
+
+        }
+
+
+        <!-- ================================= -->
+        <!-- ERROR -->
+        <!-- ================================= -->
+
+        @if (errorMessage) {
+
+          <div class="error">
+
+            {{ errorMessage }}
+
+          </div>
+
+        }
+
+
+        <!-- ================================= -->
+        <!-- ACTIONS -->
+        <!-- ================================= -->
+
+        <div class="registration-actions">
+
+
+          <!-- REGISTER -->
+
+          <button
+            class="register-btn"
+            (click)="register()"
+            [disabled]="isRegistering">
+
+            @if (isRegistering) {
+
+              Registering...
+
+            } @else {
+
+              Register for Event
+
+            }
+
+          </button>
+
+
+          <!-- CANCEL -->
+
+          <button
+            class="cancel-btn"
+            (click)="cancel()"
+            [disabled]="isRegistering">
+
+            Cancel
+
+          </button>
+
+
+        </div>
+
+
+      </div>
+
+    }
+
+
+  </main>
+
+</div>

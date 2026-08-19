@@ -1,0 +1,324 @@
+<div class="events-container">
+
+  <!-- ========================================== -->
+  <!-- HEADER -->
+  <!-- ========================================== -->
+
+  <header class="events-header">
+
+    <div>
+      <h1>EventHub</h1>
+      <p>Manage Events</p>
+    </div>
+
+    <button
+      class="add-event-btn"
+      (click)="addEvent()">
+
+      + Add Event
+
+    </button>
+
+  </header>
+
+
+  <!-- ========================================== -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================================== -->
+
+  <main class="events-content">
+
+
+    <!-- ======================================== -->
+    <!-- PAGE TITLE -->
+    <!-- ======================================== -->
+
+    <div class="page-title">
+
+      <div>
+
+        <h2>Events</h2>
+
+        <p>
+          View and manage all events.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ======================================== -->
+    <!-- LOADING -->
+    <!-- ======================================== -->
+
+    @if (isLoading) {
+
+      <div class="loading">
+
+        Loading events...
+
+      </div>
+
+    }
+
+
+    <!-- ======================================== -->
+    <!-- ERROR -->
+    <!-- ======================================== -->
+
+    @if (!isLoading && errorMessage) {
+
+      <div class="error">
+
+        {{ errorMessage }}
+
+      </div>
+
+    }
+
+
+    <!-- ======================================== -->
+    <!-- EMPTY -->
+    <!-- ======================================== -->
+
+    @if (
+      !isLoading &&
+      !errorMessage &&
+      events.length === 0
+    ) {
+
+      <div class="empty">
+
+        <h3>
+          No Events Found
+        </h3>
+
+        <p>
+          There are currently no events.
+        </p>
+
+        <button
+          class="add-event-btn"
+          (click)="addEvent()">
+
+          Create First Event
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- ======================================== -->
+    <!-- EVENTS -->
+    <!-- ======================================== -->
+
+    @if (
+      !isLoading &&
+      !errorMessage &&
+      events.length > 0
+    ) {
+
+      <div class="events-grid">
+
+
+        <!-- ====================================== -->
+        <!-- LOOP THROUGH EVENTS -->
+        <!-- ====================================== -->
+
+        @for (
+          event of events;
+          track event.id
+        ) {
+
+          <div class="event-card">
+
+
+            <!-- ================================= -->
+            <!-- EVENT TITLE -->
+            <!-- ================================= -->
+
+            <h3>
+
+              {{ event.title }}
+
+            </h3>
+
+
+            <!-- ================================= -->
+            <!-- DESCRIPTION -->
+            <!-- ================================= -->
+
+            <p class="description">
+
+              {{ event.description }}
+
+            </p>
+
+
+            <!-- ================================= -->
+            <!-- DATE -->
+            <!-- ================================= -->
+
+            <div class="event-info">
+
+              <strong>
+                📅 Date:
+              </strong>
+
+              <span>
+
+                {{ event.eventDate }}
+
+              </span>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- VENUE -->
+            <!-- ================================= -->
+
+            <div class="event-info">
+
+              <strong>
+                📍 Venue:
+              </strong>
+
+              <span>
+
+                {{ event.venue }}
+
+              </span>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- CAPACITY -->
+            <!-- ================================= -->
+
+            <div class="event-info">
+
+              <strong>
+                👥 Capacity:
+              </strong>
+
+              <span>
+
+                {{ event.capacity }}
+
+              </span>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- CATEGORY -->
+            <!-- ================================= -->
+
+            <div class="event-info">
+
+              <strong>
+                📂 Category:
+              </strong>
+
+              <span>
+
+                {{ event.category?.name || 'Not available' }}
+
+              </span>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- ORGANIZER -->
+            <!-- ================================= -->
+
+            <div class="event-info">
+
+              <strong>
+                👤 Organizer:
+              </strong>
+
+              <span>
+
+                {{
+                  event.organizer?.name ||
+                  event.organizer?.email ||
+                  'Not available'
+                }}
+
+              </span>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- ACTION BUTTONS -->
+            <!-- ================================= -->
+
+            @if (event.id !== undefined) {
+
+              <div class="event-actions">
+
+
+                <!-- ============================= -->
+                <!-- REGISTER -->
+                <!-- ============================= -->
+
+                <button
+                  class="register-btn"
+                  (click)="registerEvent(event.id)">
+
+                  Register
+
+                </button>
+
+
+                <!-- ============================= -->
+                <!-- EDIT -->
+                <!-- ============================= -->
+
+                <button
+                  class="edit-btn"
+                  (click)="editEvent(event.id)">
+
+                  Edit
+
+                </button>
+
+
+                <!-- ============================= -->
+                <!-- DELETE -->
+                <!-- ============================= -->
+
+                <button
+                  class="delete-btn"
+                  (click)="deleteEvent(event.id)">
+
+                  Delete
+
+                </button>
+
+
+              </div>
+
+            }
+
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+
+  </main>
+
+</div>

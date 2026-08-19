@@ -1,0 +1,302 @@
+<div class="edit-event-container">
+
+  <!-- ============================ -->
+  <!-- HEADER -->
+  <!-- ============================ -->
+
+  <header class="edit-event-header">
+
+    <div>
+
+      <h1>EventHub</h1>
+
+      <p>
+        Edit Event
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
+
+      ← Back to Events
+
+    </button>
+
+  </header>
+
+
+  <!-- ============================ -->
+  <!-- MAIN CONTENT -->
+  <!-- ============================ -->
+
+  <main class="edit-event-content">
+
+    <div class="page-title">
+
+      <h2>
+        Edit Event
+      </h2>
+
+      <p>
+        Update the event information below.
+      </p>
+
+    </div>
+
+
+    <!-- ============================ -->
+    <!-- LOADING -->
+    <!-- ============================ -->
+
+    @if (isLoading) {
+
+      <div class="loading">
+
+        Loading event...
+
+      </div>
+
+    }
+
+
+    <!-- ============================ -->
+    <!-- ERROR -->
+    <!-- ============================ -->
+
+    @if (!isLoading && errorMessage) {
+
+      <div class="error-message">
+
+        {{ errorMessage }}
+
+      </div>
+
+    }
+
+
+    <!-- ============================ -->
+    <!-- SUCCESS -->
+    <!-- ============================ -->
+
+    @if (successMessage) {
+
+      <div class="success-message">
+
+        {{ successMessage }}
+
+      </div>
+
+    }
+
+
+    <!-- ============================ -->
+    <!-- FORM -->
+    <!-- ============================ -->
+
+    @if (!isLoading && !errorMessage) {
+
+      <form
+        class="edit-event-form"
+        (ngSubmit)="updateEvent()">
+
+
+        <!-- ============================ -->
+        <!-- TITLE -->
+        <!-- ============================ -->
+
+        <div class="form-group">
+
+          <label for="title">
+            Event Title
+          </label>
+
+          <input
+            id="title"
+            type="text"
+            name="title"
+            [(ngModel)]="title"
+            placeholder="Enter event title"
+            required>
+
+        </div>
+
+
+        <!-- ============================ -->
+        <!-- DESCRIPTION -->
+        <!-- ============================ -->
+
+        <div class="form-group">
+
+          <label for="description">
+            Description
+          </label>
+
+          <textarea
+            id="description"
+            name="description"
+            [(ngModel)]="description"
+            placeholder="Enter event description"
+            rows="5"
+            required>
+          </textarea>
+
+        </div>
+
+
+        <!-- ============================ -->
+        <!-- DATE -->
+        <!-- ============================ -->
+
+        <div class="form-group">
+
+          <label for="eventDate">
+            Event Date
+          </label>
+
+          <input
+            id="eventDate"
+            type="date"
+            name="eventDate"
+            [(ngModel)]="eventDate"
+            required>
+
+        </div>
+
+
+        <!-- ============================ -->
+        <!-- VENUE -->
+        <!-- ============================ -->
+
+        <div class="form-group">
+
+          <label for="venue">
+            Venue
+          </label>
+
+          <input
+            id="venue"
+            type="text"
+            name="venue"
+            [(ngModel)]="venue"
+            placeholder="Enter event venue"
+            required>
+
+        </div>
+
+
+        <!-- ============================ -->
+        <!-- CAPACITY -->
+        <!-- ============================ -->
+
+        <div class="form-group">
+
+          <label for="capacity">
+            Capacity
+          </label>
+
+          <input
+            id="capacity"
+            type="number"
+            name="capacity"
+            [(ngModel)]="capacity"
+            placeholder="Enter capacity"
+            min="1"
+            required>
+
+        </div>
+
+
+        <!-- ============================ -->
+        <!-- CATEGORY -->
+        <!-- ============================ -->
+
+        <div class="form-group">
+
+          <label for="categoryId">
+            Category ID
+          </label>
+
+          <input
+            id="categoryId"
+            type="number"
+            name="categoryId"
+            [(ngModel)]="categoryId"
+            placeholder="Enter category ID"
+            min="1"
+            required>
+
+        </div>
+
+
+        <!-- ============================ -->
+        <!-- ORGANIZER -->
+        <!-- ============================ -->
+
+        <div class="form-group">
+
+          <label for="organizerId">
+            Organizer ID
+          </label>
+
+          <input
+            id="organizerId"
+            type="number"
+            name="organizerId"
+            [(ngModel)]="organizerId"
+            placeholder="Enter organizer ID"
+            min="1"
+            required>
+
+        </div>
+
+
+        <!-- ============================ -->
+        <!-- BUTTONS -->
+        <!-- ============================ -->
+
+        <div class="form-actions">
+
+          <!-- CANCEL -->
+
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="cancel()">
+
+            Cancel
+
+          </button>
+
+
+          <!-- UPDATE -->
+
+          <button
+            type="submit"
+            class="update-btn"
+            [disabled]="isUpdating">
+
+            @if (isUpdating) {
+
+              Updating...
+
+            } @else {
+
+              Update Event
+
+            }
+
+          </button>
+
+        </div>
+
+
+      </form>
+
+    }
+
+  </main>
+
+</div>
