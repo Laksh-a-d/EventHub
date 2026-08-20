@@ -46,12 +46,11 @@ export class Login {
 
         this.isLoading = false;
 
-        if (response?.token) {
-          console.log('JWT received');
-          console.log('Token:', response.token);
+        if (this.auth.isAdmin()) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/events']);
         }
-
-        this.router.navigate(['/dashboard']);
       },
 
       error: (error) => {

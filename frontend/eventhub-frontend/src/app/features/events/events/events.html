@@ -1,324 +1,102 @@
+<app-navbar></app-navbar>
+
 <div class="events-container">
-
-  <!-- ========================================== -->
-  <!-- HEADER -->
-  <!-- ========================================== -->
-
-  <header class="events-header">
-
-    <div>
-      <h1>EventHub</h1>
-      <p>Manage Events</p>
-    </div>
-
-    <button
-      class="add-event-btn"
-      (click)="addEvent()">
-
-      + Add Event
-
-    </button>
-
-  </header>
-
-
-  <!-- ========================================== -->
-  <!-- MAIN CONTENT -->
-  <!-- ========================================== -->
-
   <main class="events-content">
-
-
-    <!-- ======================================== -->
-    <!-- PAGE TITLE -->
-    <!-- ======================================== -->
-
-    <div class="page-title">
-
-      <div>
-
+    <div class="page-header-row">
+      <div class="page-title">
         <h2>Events</h2>
-
-        <p>
-          View and manage all events.
-        </p>
-
+        <p>Explore upcoming events, conferences, workshops, and sports.</p>
       </div>
 
+      @if (isAdmin) {
+        <button class="add-event-btn" (click)="addEvent()">
+          + Add New Event
+        </button>
+      }
     </div>
 
+    @if (successMessage) {
+      <div class="alert-success">
+        ✓ {{ successMessage }}
+      </div>
+    }
 
-    <!-- ======================================== -->
-    <!-- LOADING -->
-    <!-- ======================================== -->
+    @if (errorMessage) {
+      <div class="alert-error">
+        ⚠️ {{ errorMessage }}
+      </div>
+    }
 
     @if (isLoading) {
-
-      <div class="loading">
-
-        Loading events...
-
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading events...</p>
       </div>
-
-    }
-
-
-    <!-- ======================================== -->
-    <!-- ERROR -->
-    <!-- ======================================== -->
-
-    @if (!isLoading && errorMessage) {
-
-      <div class="error">
-
-        {{ errorMessage }}
-
+    } @else if (events.length === 0 && !errorMessage) {
+      <div class="empty-state">
+        <div class="empty-icon">📅</div>
+        <h3>No Events Available</h3>
+        <p>There are currently no events listed.</p>
+        @if (isAdmin) {
+          <button class="add-event-btn" (click)="addEvent()">
+            + Create First Event
+          </button>
+        }
       </div>
-
-    }
-
-
-    <!-- ======================================== -->
-    <!-- EMPTY -->
-    <!-- ======================================== -->
-
-    @if (
-      !isLoading &&
-      !errorMessage &&
-      events.length === 0
-    ) {
-
-      <div class="empty">
-
-        <h3>
-          No Events Found
-        </h3>
-
-        <p>
-          There are currently no events.
-        </p>
-
-        <button
-          class="add-event-btn"
-          (click)="addEvent()">
-
-          Create First Event
-
-        </button>
-
-      </div>
-
-    }
-
-
-    <!-- ======================================== -->
-    <!-- EVENTS -->
-    <!-- ======================================== -->
-
-    @if (
-      !isLoading &&
-      !errorMessage &&
-      events.length > 0
-    ) {
-
+    } @else if (events.length > 0) {
       <div class="events-grid">
-
-
-        <!-- ====================================== -->
-        <!-- LOOP THROUGH EVENTS -->
-        <!-- ====================================== -->
-
-        @for (
-          event of events;
-          track event.id
-        ) {
-
+        @for (event of events; track event.id) {
           <div class="event-card">
-
-
-            <!-- ================================= -->
-            <!-- EVENT TITLE -->
-            <!-- ================================= -->
-
-            <h3>
-
-              {{ event.title }}
-
-            </h3>
-
-
-            <!-- ================================= -->
-            <!-- DESCRIPTION -->
-            <!-- ================================= -->
-
-            <p class="description">
-
-              {{ event.description }}
-
-            </p>
-
-
-            <!-- ================================= -->
-            <!-- DATE -->
-            <!-- ================================= -->
-
-            <div class="event-info">
-
-              <strong>
-                📅 Date:
-              </strong>
-
-              <span>
-
-                {{ event.eventDate }}
-
-              </span>
-
+            <div class="card-top">
+              <span class="category-pill">{{ event.category?.name || 'General' }}</span>
+              <span class="capacity-tag">👥 {{ event.capacity }} slots</span>
             </div>
 
+            <h3 class="event-title">{{ event.title }}</h3>
 
-            <!-- ================================= -->
-            <!-- VENUE -->
-            <!-- ================================= -->
+            <p class="event-desc">{{ event.description }}</p>
 
-            <div class="event-info">
-
-              <strong>
-                📍 Venue:
-              </strong>
-
-              <span>
-
-                {{ event.venue }}
-
-              </span>
-
+            <div class="event-meta">
+              <div class="meta-row">
+                <span class="meta-icon">📅</span>
+                <span class="meta-label">Date:</span>
+                <span class="meta-val">{{ event.eventDate }}</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-icon">📍</span>
+                <span class="meta-label">Venue:</span>
+                <span class="meta-val">{{ event.venue }}</span>
+              </div>
+              @if (event.organizer?.name || event.organizer?.email) {
+                <div class="meta-row">
+                  <span class="meta-icon">👤</span>
+                  <span class="meta-label">Organizer:</span>
+                  <span class="meta-val">{{ event.organizer?.name || event.organizer?.email }}</span>
+                </div>
+              }
             </div>
-
-
-            <!-- ================================= -->
-            <!-- CAPACITY -->
-            <!-- ================================= -->
-
-            <div class="event-info">
-
-              <strong>
-                👥 Capacity:
-              </strong>
-
-              <span>
-
-                {{ event.capacity }}
-
-              </span>
-
-            </div>
-
-
-            <!-- ================================= -->
-            <!-- CATEGORY -->
-            <!-- ================================= -->
-
-            <div class="event-info">
-
-              <strong>
-                📂 Category:
-              </strong>
-
-              <span>
-
-                {{ event.category?.name || 'Not available' }}
-
-              </span>
-
-            </div>
-
-
-            <!-- ================================= -->
-            <!-- ORGANIZER -->
-            <!-- ================================= -->
-
-            <div class="event-info">
-
-              <strong>
-                👤 Organizer:
-              </strong>
-
-              <span>
-
-                {{
-                  event.organizer?.name ||
-                  event.organizer?.email ||
-                  'Not available'
-                }}
-
-              </span>
-
-            </div>
-
-
-            <!-- ================================= -->
-            <!-- ACTION BUTTONS -->
-            <!-- ================================= -->
 
             @if (event.id !== undefined) {
-
-              <div class="event-actions">
-
-
-                <!-- ============================= -->
-                <!-- REGISTER -->
-                <!-- ============================= -->
-
-                <button
-                  class="register-btn"
-                  (click)="registerEvent(event.id)">
-
-                  Register
-
-                </button>
-
-
-                <!-- ============================= -->
-                <!-- EDIT -->
-                <!-- ============================= -->
-
-                <button
-                  class="edit-btn"
-                  (click)="editEvent(event.id)">
-
-                  Edit
-
-                </button>
-
-
-                <!-- ============================= -->
-                <!-- DELETE -->
-                <!-- ============================= -->
-
-                <button
-                  class="delete-btn"
-                  (click)="deleteEvent(event.id)">
-
-                  Delete
-
-                </button>
-
-
+              <div class="card-footer">
+                @if (!isAdmin) {
+                  <button class="btn-register" (click)="registerEvent(event.id)">
+                    Register Now
+                  </button>
+                } @else {
+                  <div class="admin-actions">
+                    <button class="btn-edit" (click)="editEvent(event.id)">
+                      Edit
+                    </button>
+                    <button class="btn-delete" (click)="deleteEvent(event.id)">
+                      Delete
+                    </button>
+                  </div>
+                }
               </div>
-
             }
-
-
           </div>
-
         }
-
       </div>
-
     }
-
-
   </main>
-
 </div>

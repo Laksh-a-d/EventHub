@@ -1,113 +1,96 @@
+<app-navbar></app-navbar>
+
 <div class="dashboard-container">
-
-  <header class="dashboard-header">
-
-    <div>
-      <h1>EventHub</h1>
-      <p>Event Management Dashboard</p>
+  <main class="dashboard-content">
+    <div class="page-title">
+      <h2>Admin Dashboard</h2>
+      <p>Overview of system metrics, event registrations, and user activity.</p>
     </div>
 
-    <button class="logout-btn">
-      Logout
-    </button>
-
-  </header>
-
-
-  <main>
-
-    <h2>Dashboard Overview</h2>
-
-
     @if (isLoading) {
-
-      <div class="loading">
-        Loading dashboard...
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading dashboard metrics...</p>
       </div>
-
     } @else if (errorMessage) {
-
-      <div class="error">
-        {{ errorMessage }}
+      <div class="alert-error">
+        ⚠️ {{ errorMessage }}
       </div>
-
     } @else {
-
       <div class="dashboard-cards">
-
-        <div class="dashboard-card">
-
-          <div class="card-icon">
-            👥
-          </div>
-
-          <div>
+        <div class="dashboard-card" routerLink="/admin/users">
+          <div class="card-icon users-icon">👥</div>
+          <div class="card-info">
             <p>Total Users</p>
             <h3>{{ totalUsers }}</h3>
           </div>
-
+          <span class="card-arrow">→</span>
         </div>
 
-
-        <div class="dashboard-card">
-
-          <div class="card-icon">
-            📅
-          </div>
-
-          <div>
+        <div class="dashboard-card" routerLink="/events">
+          <div class="card-icon events-icon">📅</div>
+          <div class="card-info">
             <p>Total Events</p>
             <h3>{{ totalEvents }}</h3>
           </div>
-
+          <span class="card-arrow">→</span>
         </div>
 
-
-        <div class="dashboard-card">
-
-          <div class="card-icon">
-            📂
-          </div>
-
-          <div>
-            <p>Total Categories</p>
-            <h3>{{ totalCategories }}</h3>
-          </div>
-
-        </div>
-
-
-        <div class="dashboard-card">
-
-          <div class="card-icon">
-            🎟️
-          </div>
-
-          <div>
+        <div class="dashboard-card" routerLink="/admin/registrations">
+          <div class="card-icon reg-icon">🎟️</div>
+          <div class="card-info">
             <p>Total Registrations</p>
             <h3>{{ totalRegistrations }}</h3>
           </div>
-
+          <span class="card-arrow">→</span>
         </div>
 
-
         <div class="dashboard-card">
-
-          <div class="card-icon">
-            🚀
+          <div class="card-icon cat-icon">📂</div>
+          <div class="card-info">
+            <p>Categories</p>
+            <h3>{{ totalCategories }}</h3>
           </div>
+        </div>
 
-          <div>
+        <div class="dashboard-card" routerLink="/events">
+          <div class="card-icon upcoming-icon">🚀</div>
+          <div class="card-info">
             <p>Upcoming Events</p>
             <h3>{{ upcomingEvents }}</h3>
           </div>
-
+          <span class="card-arrow">→</span>
         </div>
-
       </div>
 
+      <div class="quick-actions-section">
+        <h3>Quick Actions</h3>
+        <div class="actions-grid">
+          <a routerLink="/events/add" class="action-card">
+            <span class="action-icon">➕</span>
+            <div>
+              <strong>Create New Event</strong>
+              <p>Schedule a new event with venue & capacity</p>
+            </div>
+          </a>
+
+          <a routerLink="/admin/users" class="action-card">
+            <span class="action-icon">👤</span>
+            <div>
+              <strong>Manage Users</strong>
+              <p>View, edit roles, or add system accounts</p>
+            </div>
+          </a>
+
+          <a routerLink="/admin/registrations" class="action-card">
+            <span class="action-icon">📋</span>
+            <div>
+              <strong>View Registrations</strong>
+              <p>Monitor attendee lists and registration statuses</p>
+            </div>
+          </a>
+        </div>
+      </div>
     }
-
   </main>
-
 </div>

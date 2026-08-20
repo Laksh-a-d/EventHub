@@ -3,12 +3,15 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { DashboardService } from '../../core/services/dashboard';
+import { Navbar } from '../../shared/components/navbar/navbar';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
+  imports: [CommonModule, RouterLink, Navbar],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -25,29 +28,21 @@ export class Dashboard implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
+    private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-
-    console.log('Dashboard component loaded');
-
     this.loadDashboard();
   }
 
   loadDashboard(): void {
-
-    console.log('Loading dashboard...');
-
     this.isLoading = true;
     this.errorMessage = '';
+    this.cdr.detectChanges();
 
     this.dashboardService.getDashboard().subscribe({
-
       next: (data: any) => {
-
-        console.log('Dashboard data:', data);
-
         this.totalUsers = data.totalUsers ?? 0;
         this.totalEvents = data.totalEvents ?? 0;
         this.totalCategories = data.totalCategories ?? 0;
@@ -55,27 +50,17 @@ export class Dashboard implements OnInit {
         this.upcomingEvents = data.upcomingEvents ?? 0;
 
         this.isLoading = false;
-
-        console.log('Loading finished');
-        console.log('isLoading:', this.isLoading);
-
-        // Force Angular to update the HTML
         this.cdr.detectChanges();
       },
-
       error: (error: any) => {
-
-        console.error('Dashboard error:', error);
-
         this.isLoading = false;
-
-        this.errorMessage =
-          'Unable to load dashboard data.';
-
-        // Force Angular to update the HTML
+        if (error?.status === 403) {
+          this.errorMessage = 'Access denied. Administrator privileges required.';
+        } else {
+          this.errorMessage = error?.error?.message || 'Unable to load dashboard data.';
+        }
         this.cdr.detectChanges();
       }
-
     });
   }
 }

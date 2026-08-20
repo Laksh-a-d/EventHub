@@ -16,6 +16,9 @@ public interface UserService {
     // Get User By ID
     UserResponse getUserById(Long id);
 
+    // Get User By Email
+    UserResponse getUserByEmail(String email);
+
     // Update User
     UserResponse updateUser(Long id, User user);
 

@@ -64,6 +64,13 @@ public class SecurityConfig {
                 ).permitAll()
 
                 // --------------------------------------
+                // CURRENT USER PROFILE
+                // --------------------------------------
+                .requestMatchers(
+                    "/api/users/me"
+                ).hasAnyRole("ADMIN", "STUDENT")
+
+                // --------------------------------------
                 // ADMIN ONLY
                 // --------------------------------------
                 .requestMatchers(

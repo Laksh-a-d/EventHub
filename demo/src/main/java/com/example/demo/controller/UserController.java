@@ -31,6 +31,20 @@ public class UserController {
     }
 
     // ===============================
+    // Get Current User Profile (/me)
+    // ===============================
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
+    public ResponseEntity<UserResponse> getCurrentUser(
+            org.springframework.security.core.Authentication authentication) {
+
+        return ResponseEntity.ok(
+                userService.getUserByEmail(authentication.getName())
+        );
+    }
+
+    // ===============================
     // Create User
     // ===============================
 

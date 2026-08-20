@@ -39,10 +39,12 @@ public class RegistrationController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
     public ResponseEntity<RegistrationResponse> saveRegistration(
-            @Valid @RequestBody Registration registration) {
+            @RequestBody Registration registration,
+            org.springframework.security.core.Authentication authentication) {
 
+        String userEmail = authentication != null ? authentication.getName() : null;
         RegistrationResponse savedRegistration =
-                registrationService.saveRegistration(registration);
+                registrationService.saveRegistration(registration, userEmail);
 
         return new ResponseEntity<>(
                 savedRegistration,
@@ -51,7 +53,7 @@ public class RegistrationController {
     }
 
     // ==========================================
-    // GET ALL REGISTRATIONS
+    // GET ALL REGISTRATIONS (ADMIN ONLY)
     // ==========================================
 
     @GetMapping
@@ -65,11 +67,26 @@ public class RegistrationController {
     }
 
     // ==========================================
+    // GET MY REGISTRATIONS (CURRENT USER)
+    // ==========================================
+
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
+    public ResponseEntity<List<RegistrationResponse>>
+            getMyRegistrations(
+                    org.springframework.security.core.Authentication authentication) {
+
+        return ResponseEntity.ok(
+                registrationService.getMyRegistrations(authentication.getName())
+        );
+    }
+
+    // ==========================================
     // GET REGISTRATION BY ID
     // ==========================================
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
     public ResponseEntity<RegistrationResponse>
             getRegistrationById(
                     @PathVariable Long id) {

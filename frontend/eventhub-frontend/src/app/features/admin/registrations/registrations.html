@@ -1,0 +1,114 @@
+<app-navbar></app-navbar>
+
+<div class="admin-container">
+  <main class="admin-content">
+    <div class="page-header-row">
+      <div class="page-title">
+        <h2>Registration Management</h2>
+        <p>Monitor all event registrations, check attendees, and manage statuses.</p>
+      </div>
+
+      <div class="filter-controls">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search attendee, event, venue..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+        />
+
+        <select class="filter-select" [(ngModel)]="statusFilter" (change)="onFilterChange()">
+          <option value="ALL">All Statuses</option>
+          <option value="REGISTERED">Registered</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
+      </div>
+    </div>
+
+    @if (successMessage) {
+      <div class="alert-success">
+        ✓ {{ successMessage }}
+      </div>
+    }
+
+    @if (errorMessage) {
+      <div class="alert-error">
+        ⚠️ {{ errorMessage }}
+      </div>
+    }
+
+    @if (isLoading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading registrations...</p>
+      </div>
+    } @else if (filteredRegistrations.length === 0 && !errorMessage) {
+      <div class="empty-state">
+        <div class="empty-icon">🎟️</div>
+        <h3>No Registrations Found</h3>
+        <p>
+          @if (searchTerm || statusFilter !== 'ALL') {
+            No registrations match your current filters.
+          } @else {
+            No attendees have registered for events yet.
+          }
+        </p>
+      </div>
+    } @else if (filteredRegistrations.length > 0) {
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="reg-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Attendee</th>
+                <th>Event</th>
+                <th>Event Date & Venue</th>
+                <th>Registered On</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (reg of filteredRegistrations; track reg.id) {
+                <tr>
+                  <td>{{ reg.id }}</td>
+                  <td>
+                    <div class="user-info-cell">
+                      <strong>{{ reg.user?.fullName || 'User' }}</strong>
+                      <span class="user-email">{{ reg.user?.email || '—' }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <strong>{{ reg.event?.title || 'Event' }}</strong>
+                  </td>
+                  <td>
+                    <div class="event-meta-cell">
+                      <span>📅 {{ reg.event?.eventDate || 'TBD' }}</span>
+                      <span class="venue-text">📍 {{ reg.event?.venue || 'TBD' }}</span>
+                    </div>
+                  </td>
+                  <td>{{ reg.registrationDate }}</td>
+                  <td>
+                    <span class="status-badge" [class.registered]="reg.status === 'REGISTERED'" [class.cancelled]="reg.status === 'CANCELLED'">
+                      {{ reg.status }}
+                    </span>
+                  </td>
+                  <td>
+                    @if (reg.status === 'REGISTERED') {
+                      <button class="btn-cancel-reg" (click)="cancelRegistration(reg)">
+                        Cancel
+                      </button>
+                    } @else {
+                      <span class="cancelled-text">—</span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  </main>
+</div>

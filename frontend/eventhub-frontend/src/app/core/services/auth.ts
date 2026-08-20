@@ -183,6 +183,68 @@ export class AuthService {
 
 
   // ==========================================
+  // GET USER EMAIL FROM JWT
+  // ==========================================
+
+  getUserEmail(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.email ?? payload.sub ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  // ==========================================
+  // GET FULL NAME FROM JWT
+  // ==========================================
+
+  getFullName(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.fullName ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  // ==========================================
+  // CHECK IF ADMIN
+  // ==========================================
+
+  isAdmin(): boolean {
+    const role = this.getUserRole();
+    return role === 'ADMIN' || role === 'ROLE_ADMIN';
+  }
+
+  // ==========================================
+  // CHECK IF STUDENT
+  // ==========================================
+
+  isStudent(): boolean {
+    const role = this.getUserRole();
+    return role === 'STUDENT' || role === 'ROLE_STUDENT';
+  }
+
+  // ==========================================
+  // GET CURRENT USER OBJECT
+  // ==========================================
+
+  getCurrentUser(): { id: number | null; email: string | null; fullName: string | null; role: string | null } | null {
+    if (!this.isLoggedIn()) return null;
+    return {
+      id: this.getUserId(),
+      email: this.getUserEmail(),
+      fullName: this.getFullName(),
+      role: this.getUserRole()
+    };
+  }
+
+  // ==========================================
   // LOGOUT
   // ==========================================
 

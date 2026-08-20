@@ -18,6 +18,8 @@ import com.example.demo.dto.response.EventResponse;
 import com.example.demo.entity.Event;
 import com.example.demo.service.EventService;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
@@ -33,12 +35,14 @@ public class EventController {
     // ==========================
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public EventResponse saveEvent(@RequestBody Event event) {
 
         return eventService.saveEvent(event);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
     public List<EventResponse> getAllEvents() {
 
         return eventService.getAllEvents();
@@ -49,6 +53,7 @@ public class EventController {
     // ==========================
 
     @GetMapping("/page")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
     public Page<EventResponse> getAllEventsWithPagination(
 
             @RequestParam(defaultValue = "0") int page,
@@ -64,6 +69,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
     public EventResponse getEventById(
             @PathVariable Long id) {
 
@@ -71,6 +77,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public EventResponse updateEvent(
             @PathVariable Long id,
             @RequestBody Event event) {
@@ -79,6 +86,7 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteEvent(
             @PathVariable Long id) {
 

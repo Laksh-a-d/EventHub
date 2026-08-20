@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.mapper.UserMapper;
 import com.example.demo.dto.response.UserResponse;
 import com.example.demo.entity.User;
+import com.example.demo.exception.DuplicateResourceException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
@@ -33,7 +35,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse saveUser(User user) {
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists.");
+            throw new DuplicateResourceException("Email already exists.");
         }
 
         // Encrypt password before saving
@@ -67,7 +69,22 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found.")
+                        new ResourceNotFoundException("User not found with id: " + id)
+                );
+
+        return UserMapper.toResponse(user);
+    }
+
+    // ==========================================
+    // Get User By Email
+    // ==========================================
+
+    @Override
+    public UserResponse getUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found with email: " + email)
                 );
 
         return UserMapper.toResponse(user);
@@ -82,13 +99,15 @@ public class UserServiceImpl implements UserService {
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found.")
+                        new ResourceNotFoundException("User not found with id: " + id)
                 );
 
         existingUser.setFullName(user.getFullName());
         existingUser.setEmail(user.getEmail());
         existingUser.setPhoneNumber(user.getPhoneNumber());
-        existingUser.setRole(user.getRole());
+        if (user.getRole() != null) {
+            existingUser.setRole(user.getRole());
+        }
 
         // Only update password if a new password is provided
         if (user.getPassword() != null
@@ -113,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found.")
+                        new ResourceNotFoundException("User not found with id: " + id)
                 );
 
         userRepository.delete(user);

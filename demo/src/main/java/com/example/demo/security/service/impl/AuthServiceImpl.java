@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.request.AuthRequest;
 import com.example.demo.dto.response.AuthResponse;
+import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.security.jwt.JwtService;
 import com.example.demo.security.service.AuthService;
 
@@ -14,11 +17,14 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
-                           JwtService jwtService) {
+                           JwtService jwtService,
+                           UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -31,7 +37,10 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-        String token = jwtService.generateToken(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + request.getEmail()));
+
+        String token = jwtService.generateToken(user);
 
         return new AuthResponse(token);
     }

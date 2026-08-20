@@ -9,13 +9,21 @@ import { Observable } from 'rxjs';
 
 export interface RegistrationRequest {
 
-  userId: number;
+  userId?: number;
 
-  eventId: number;
+  eventId?: number;
 
-  registrationDate: string;
+  event?: {
+    id: number;
+  };
 
-  status: 'REGISTERED' | 'CANCELLED';
+  user?: {
+    id?: number;
+  };
+
+  registrationDate?: string;
+
+  status?: 'REGISTERED' | 'CANCELLED';
 
 }
 
@@ -98,21 +106,29 @@ export class RegistrationService {
     registration: RegistrationRequest
   ): Observable<RegistrationResponse> {
 
+    const payload = {
+      event: {
+        id: registration.eventId ?? registration.event?.id
+      },
+      registrationDate: registration.registrationDate,
+      status: registration.status ?? 'REGISTERED'
+    };
+
     console.log(
       'CREATING REGISTRATION:',
-      registration
+      payload
     );
 
     return this.http.post<RegistrationResponse>(
       this.apiUrl,
-      registration
+      payload
     );
 
   }
 
 
   // ========================================
-  // GET ALL REGISTRATIONS
+  // GET ALL REGISTRATIONS (ADMIN)
   // ========================================
 
   getRegistrations(): Observable<RegistrationResponse[]> {
@@ -123,6 +139,23 @@ export class RegistrationService {
 
     return this.http.get<RegistrationResponse[]>(
       this.apiUrl
+    );
+
+  }
+
+
+  // ========================================
+  // GET MY REGISTRATIONS (CURRENT USER)
+  // ========================================
+
+  getMyRegistrations(): Observable<RegistrationResponse[]> {
+
+    console.log(
+      'GET MY REGISTRATIONS'
+    );
+
+    return this.http.get<RegistrationResponse[]>(
+      `${this.apiUrl}/my`
     );
 
   }
