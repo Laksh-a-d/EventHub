@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_CONFIG } from '../config/api.config';
 
 
 // ======================================================
@@ -129,7 +130,7 @@ export interface Event {
 export class EventsService {
 
   private apiUrl =
-    'http://localhost:8080/api/events';
+    `${API_CONFIG.baseUrl}/events`;
 
 
   constructor(

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.sh",
+  "buildCommand": "cd frontend/eventhub-frontend && npm install && npm run build",
+  "outputDirectory": "frontend/eventhub-frontend/dist/eventhub-frontend/browser",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

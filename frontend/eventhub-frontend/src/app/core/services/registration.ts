@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_CONFIG } from '../config/api.config';
 
 
 // ==========================================
@@ -86,7 +87,7 @@ export class RegistrationService {
   // ========================================
 
   private apiUrl =
-    'http://localhost:8080/api/registrations';
+    `${API_CONFIG.baseUrl}/registrations`;
 
 
   // ========================================
